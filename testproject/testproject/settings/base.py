@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "wiki.plugins.help.apps.HelpConfig",
     "wiki.plugins.links.apps.LinksConfig",
     "wiki.plugins.images.apps.ImagesConfig",
+    "wiki.plugins.videos.apps.VideosConfig",
     "wiki.plugins.attachments.apps.AttachmentsConfig",
     "wiki.plugins.notifications.apps.NotificationsConfig",
     "wiki.plugins.editsection.apps.EditSectionConfig",
