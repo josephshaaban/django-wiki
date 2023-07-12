@@ -1,0 +1,108 @@
+{% extends 'wiki/article.html' %}
+{% load i18n wiki_tags humanize %}
+
+
+{% block wiki_pagetitle %}{% trans "Videos" %}: {{ article.current_revision.title }}{% endblock %}
+
+{% block wiki_contents_tab %}
+  <p class="lead">{% trans "The following videos are available for this article. Copy the markdown tag to directly refer to an video from the article text." %}</p>
+  <p>
+    <a href="{% url 'wiki:edit' path=urlpath.path article_id=article.id %}"
+      <span class="fa fa-arrow-left"></span>
+      {% trans "Back to edit page" %}
+    </a>
+  </p>
+  <table class="table table-bordered table-striped" style="width: 100%;">
+  {% for video in videos %}
+    {% with video.current_revision.videorevision as revision %}
+      <tr>
+        <th>{{ revision.get_filename|default:_("No file") }}</th>
+        <th>{% trans "Markdown tag" %}</th>
+        <th>{% trans "Info" %}</th>
+      </tr>
+      <tr>
+        <td rowspan="3">
+          <div class="img-thumbnail">
+            <video width="360" height="200" controls>
+              <source src="{{ revision.video.url }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video> 
+          </div>
+          {% if video|can_write:user %}
+          <p>
+            {% if revision.deleted %}
+              <a href="{% url 'wiki:videos_add_revision' path=urlpath.path article_id=article.id video_id=video.id %}">
+                <span class="fa fa-upload"></span>
+                {% trans "Upload and publish new video" %}
+              </a> <br />
+              <a href="{% url 'wiki:videos_restore' path=urlpath.path article_id=article.id video_id=video.id %}">
+                <span class="fa fa-refresh"></span>
+                {% trans "Restore video" %}
+              </a>
+            {% else %}
+              <a href="{% url 'wiki:videos_add_revision' path=urlpath.path article_id=article.id video_id=video.id %}">
+                <span class="fa fa-upload"></span>
+                {% trans "Upload replacement" %}
+              </a> <br />
+              <a href="{% url 'wiki:videos_delete' path=urlpath.path article_id=article.id video_id=video.id %}">
+                <span class="fa fa-remove"></span>
+                {% trans "Remove video" %}
+              </a>
+            {% endif %}
+            {% if article|can_moderate:user %}
+            <br />
+            <a href="{% url 'wiki:videos_purge' path=urlpath.path article_id=article.id video_id=video.id %}">
+              <span class="fa fa-trash"></span>
+              {% trans "Completely delete" %}
+            </a>
+            {% endif %}
+          </p>
+          {% endif %}
+        </td>
+        <td>NOT SUPPORTED FOR NOW!!<br><code>[video:{{ video.id }}]</code></td>
+        <td>
+          <strong>Uploaded: </strong>{% include "wiki/includes/revision_info.html" %}<br/>
+          <strong>Size: </strong>{{ revision.get_size|filesizeformat }}<br />
+          <strong>Resolution: </strong>{{ revision.width }}x{{ revision.height }} pixels<br />
+          <strong>Duration: </strong>None<br />
+        </td>
+      </tr>
+      <tr>
+        <th colspan="100">{% trans "History" %}</th>
+      </tr>
+      <tr>
+        <td colspan="100">
+          <table class="table">
+            {% for old_revision in video.revision_set.all %}
+              <tr>
+                <td>
+                  <div class="img-thumbnail">
+                    <video width="180" height="102" controls>
+                      <source src="{{ revision.video.url }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video> 
+                  </div>
+                </td>
+                <td>
+                  <strong>Uploaded: </strong>{% include "wiki/includes/revision_info.html" with current_revision=video.current_revision revision=old_revision %}<br/>
+                  <strong>Size: </strong>{{ old_revision.videorevision.get_size|filesizeformat }}</br>
+                  <strong>Resolution: </strong>{{ old_revision.videorevision.width }}x{{ old_revision.videorevision.height }} pixels<br />
+                  <strong>Duration: </strong>None<br />
+                </td>
+                {% if video|can_write:user and old_revision != video.current_revision %}
+                  <td>
+                    <a href="{% url 'wiki:videos_set_revision' path=urlpath.path article_id=article.id video_id=video.id rev_id=old_revision.id %}">
+                      <span class="fa fa-refresh"></span>
+                      {% trans "Revert to this version" %}
+                    </a>
+                  </td>
+                {% endif %}
+              </tr>
+            {% endfor %}
+          </table>
+        </td>
+      </tr>
+    {% endwith %}
+  {% endfor %}
+  </table>
+{% endblock  %}

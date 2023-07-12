@@ -1,0 +1,17 @@
+{% load i18n %}{% spaceless %}
+{% comment %}
+  This template is used for the markdown extension that renders videos and captions.
+
+  NB! Watch out for line breaks, markdown might add <br />s and <p>s.
+{% endcomment %}
+{% with video.current_revision.videorevision as revision %}
+<div class="thumbnail {% if align %}float-{{ align }}{% endif %}" {% if width %} style="width: {{ width }}px;" {% endif %}>
+  <video {% if width %}width="{{ width }}"{% endif %} controls="true">
+    <source src="{{ revision.video.url }}" type="video/mp4">
+    {% comment %} <track src="fgsubtitles_en.vtt" kind="captions" srclang="en" label="English"> {% endcomment %}
+    {% trans "Your browser does not support the video tag." %}
+  </video>
+  <p id="video_caption">{{ caption|safe }}</p>
+</div>
+{% endwith %}
+{% endspaceless %}

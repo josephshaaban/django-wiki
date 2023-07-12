@@ -77,6 +77,9 @@ _default_tag_whitelists = bleach.ALLOWED_TAGS.union(
         "dl",
         "dt",
         "dd",
+        'video',
+        'track',
+        'source',
     }
 ).union({"h{}".format(n) for n in range(1, 7)})
 
