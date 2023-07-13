@@ -28,6 +28,12 @@ Plugin images
 .. automodule:: wiki.plugins.images.settings
    :members:
 
+Plugin videos
+-------------
+
+.. automodule:: wiki.plugins.videos.settings
+   :members:
+
 Plugin links
 ------------
 

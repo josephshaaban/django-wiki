@@ -9,6 +9,7 @@ enable/disable the core plugins:
 -  ``'wiki.plugins.globalhistory.apps.GlobalHistoryConfig'``
 -  ``'wiki.plugins.help.apps.HelpConfig'``
 -  ``'wiki.plugins.images.apps.ImagesConfig'``
+-  ``'wiki.plugins.videos.apps.VideosConfig'``
 -  ``'wiki.plugins.links.apps.LinksConfig'``
 -  ``'wiki.plugins.macros.apps.MacrosConfig'``
 -  ``'wiki.plugins.notifications.apps.NotificationsConfig'``
